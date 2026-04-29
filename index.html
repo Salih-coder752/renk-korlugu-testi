@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Vision Test / Renk Körlüğü Testi</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F3EE;
+  --surface: #FFFFFF;
+  --surface2: #F0EDE6;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #1A1916;
+  --text2: #6B6860;
+  --text3: #9B9890;
+  --accent: #2D6A4F;
+  --accent-light: #D8F3DC;
+  --warn: #B5540A;
+  --warn-light: #FEF3C7;
+  --danger: #9B1C1C;
+  --danger-light: #FDE8E8;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.10), 0 2px 8px rgba(0,0,0,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 16px 60px;
+}
+
+.container {
+  width: 100%;
+  max-width: 480px;
+}
+
+/* ── LANGUAGE SCREEN ── */
+#lang-screen {
+  animation: fadeUp 0.5s ease;
+}
+
+.lang-hero {
+  text-align: center;
+  padding: 48px 0 36px;
+}
+
+.eye-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--text);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.lang-hero h1 {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+
+.lang-hero p {
+  font-size: 14px;
+  color: var(--text2);
+}
+
+.lang-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.lang-btn {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.18s;
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  box-shadow: var(--shadow);
+}
+
+.lang-btn:hover {
+  border-color: var(--text);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.lang-btn.selected {
+  border-color: var(--text);
+  background: var(--text);
+  color: var(--bg);
+}
+
+.flag {
+  font-size: 24px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lang-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  display: block;
+}
+
+.lang-btn.selected .lang-name { color: var(--bg); }
+
+.lang-native {
+  font-size: 11px;
+  color: var(--text3);
+  display: block;
+}
+
+.lang-btn.selected .lang-native { color: rgba(255,255,255,0.6); }
+
+.start-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.start-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.start-btn:active { transform: scale(0.99); }
+
+/* ── APP SCREEN ── */
+#app-screen { display: none; animation: fadeUp 0.4s ease; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-top: 8px;
+}
+
+.app-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+}
+
+.progress-wrap {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.prog-dot {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--border2);
+  transition: background 0.3s;
+}
+.prog-dot.done { background: var(--accent); }
+.prog-dot.current { background: var(--text); }
+
+.plate-card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.plate-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.plate-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text3);
+}
+
+.plate-type {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--surface2);
+  color: var(--text2);
+}
+
+canvas {
+  border-radius: 50%;
+  display: block;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+}
+
+.question {
+  font-size: 15px;
+  font-weight: 500;
+  text-align: center;
+  margin: 16px 0 14px;
+  color: var(--text);
+}
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.opt-btn {
+  padding: 14px 10px;
+  border: 1.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--shadow);
+}
+
+.opt-btn:hover:not(:disabled) {
+  border-color: var(--text);
+  transform: translateY(-1px);
+}
+
+.opt-btn.correct {
+  background: var(--accent-light);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.opt-btn.wrong {
+  background: var(--danger-light);
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.opt-btn:disabled { cursor: default; }
+
+.feedback {
+  min-height: 20px;
+  font-size: 13px;
+  color: var(--text2);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.next-btn {
+  width: 100%;
+  padding: 14px;
+  background: var(--text);
+  color: var(--bg);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: none;
+  transition: opacity 0.15s;
+}
+.next-btn:hover { opacity: 0.85; }
+
+/* ── RESULT SCREEN ── */
+#result-screen {
+  display: none;
+  animation: fadeUp 0.5s ease;
+}
+
+.result-hero {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 36px 24px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.result-eye {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.result-score {
+  font-size: 64px;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.result-sub {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 24px;
+}
+
+.verdict-badge {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 40px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.verdict-ok { background: var(--accent-light); color: var(--accent); }
+.verdict-mild { background: var(--warn-light); color: var(--warn); }
+.verdict-severe { background: var(--danger-light); color: var(--danger); }
+
+.result-note {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+.breakdown {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+
+.breakdown h3 {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 14px;
+}
+
+.breakdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.breakdown-row:last-child { border-bottom: none; }
+
+.br-label { color: var(--text2); }
+.br-val { font-weight: 600; font-family: 'DM Mono', monospace; }
+.br-correct { color: var(--accent); }
+.br-wrong { color: var(--danger); }
+
+.action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn-outline {
+  padding: 14px;
+  border: 1.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--shadow);
+}
+
+.btn-outline:hover { border-color: var(--text); }
+
+.btn-primary {
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--text);
+  color: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.btn-primary:hover { opacity: 0.85; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.pop { animation: pop 0.25s ease; }
+
+.lang-flag-sel {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  cursor: pointer;
+  background: var(--surface);
+  transition: all 0.15s;
+}
+.lang-flag-sel:hover { border-color: var(--text); }
+
+.timer-bar-wrap {
+  width: 100%;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.timer-bar {
+  height: 100%;
+  background: var(--text);
+  border-radius: 2px;
+  transition: width 1s linear, background 0.3s;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- LANGUAGE SCREEN -->
+<div id="lang-screen">
+  <div class="lang-hero">
+    <div class="eye-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <ellipse cx="16" cy="16" rx="14" ry="9" stroke="#F5F3EE" stroke-width="2"/>
+        <circle cx="16" cy="16" r="5" fill="#F5F3EE"/>
+        <circle cx="17.5" cy="14.5" r="1.5" fill="#1A1916"/>
+      </svg>
+    </div>
+    <h1 id="hero-title">Color Vision Test</h1>
+    <p id="hero-sub">Select your language to begin</p>
+  </div>
+
+  <div class="lang-grid" id="lang-grid"></div>
+
+  <button class="start-btn" onclick="startApp()">
+    <span id="start-label">Begin Test</span>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+</div>
+
+<!-- APP SCREEN -->
+<div id="app-screen">
+  <div class="app-header">
+    <span class="app-title" id="app-title">Color Vision Test</span>
+    <div class="lang-flag-sel" id="lang-change" onclick="changeLang()" title="Change language"></div>
+  </div>
+  <div class="progress-wrap" id="progress"></div>
+  <div class="timer-bar-wrap"><div class="timer-bar" id="timer-bar"></div></div>
+
+  <div class="plate-card">
+    <div class="plate-meta">
+      <span class="plate-num" id="plate-num">01 / 10</span>
+      <span class="plate-type" id="plate-type">Red-Green</span>
+    </div>
+    <canvas id="plate" width="300" height="300"></canvas>
+    <div class="question" id="question"></div>
+    <div class="options" id="options"></div>
+    <div class="feedback" id="feedback"></div>
+    <button class="next-btn" id="next-btn"></button>
+  </div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="result-screen">
+  <div class="result-hero">
+    <div class="result-eye" id="result-emoji">👁</div>
+    <div class="result-score" id="res-score"></div>
+    <div class="result-sub" id="res-sub"></div>
+    <div class="verdict-badge" id="res-verdict"></div>
+    <div class="result-note" id="res-note"></div>
+  </div>
+
+  <div class="breakdown" id="breakdown"></div>
+
+  <div class="action-row">
+    <button class="btn-outline" onclick="changeLang()" id="btn-lang-change"></button>
+    <button class="btn-primary" onclick="restart()" id="btn-restart"></button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ── LANGUAGES ──
+const LANGS = [
+  { code:"tr", flag:"🇹🇷", name:"Turkish",    native:"Türkçe" },
+  { code:"en", flag:"🇬🇧", name:"English",    native:"English" },
+  { code:"de", flag:"🇩🇪", name:"German",     native:"Deutsch" },
+  { code:"fr", flag:"🇫🇷", name:"French",     native:"Français" },
+  { code:"es", flag:"🇪🇸", name:"Spanish",    native:"Español" },
+  { code:"it", flag:"🇮🇹", name:"Italian",    native:"Italiano" },
+  { code:"pt", flag:"🇵🇹", name:"Portuguese", native:"Português" },
+  { code:"nl", flag:"🇳🇱", name:"Dutch",      native:"Nederlands" },
+  { code:"ru", flag:"🇷🇺", name:"Russian",    native:"Русский" },
+  { code:"zh", flag:"🇨🇳", name:"Chinese",    native:"中文" },
+  { code:"ja", flag:"🇯🇵", name:"Japanese",   native:"日本語" },
+  { code:"ar", flag:"🇸🇦", name:"Arabic",     native:"العربية" },
+  { code:"ko", flag:"🇰🇷", name:"Korean",     native:"한국어" },
+  { code:"pl", flag:"🇵🇱", name:"Polish",     native:"Polski" },
+  { code:"sv", flag:"🇸🇪", name:"Swedish",    native:"Svenska" },
+  { code:"uk", flag:"🇺🇦", name:"Ukrainian",  native:"Українська" },
+];
+
+const T = {
+  tr: {
+    hero_title: "Renk Körlüğü Testi",
+    hero_sub: "Başlamak için dilinizi seçin",
+    start: "Teste Başla",
+    app_title: "Renk Körlüğü Testi",
+    question: "Bu levhada hangi sayıyı görüyorsun?",
+    question_hidden: "Bu levhada bir sayı var mı?",
+    no_number: "Sayı Yok",
+    correct: "Doğru!",
+    wrong: "Yanlış.",
+    answer_was: "Doğru cevap:",
+    next: "Sonraki →",
+    finish: "Sonucu Gör →",
+    plate_rg: "Kırmızı-Yeşil",
+    plate_by: "Mavi-Sarı",
+    plate_hidden: "Gizli Levha",
+    of: "/",
+    results_title: "Sonuçlar",
+    correct_answers: "doğru cevap",
+    verdict_ok: "Normal renk görüşü",
+    verdict_mild: "Hafif farklılık tespit edildi",
+    verdict_severe: "Renk körlüğü belirtisi",
+    note_ok: "Belirgin bir sorun tespit edilmedi. Yine de düzenli göz kontrolü önerilir.",
+    note_mild: "Bir göz doktoruna danışmanız önerilir.",
+    note_severe: "Lütfen bir göz doktoru ile görüşün. Bu test tanı niteliği taşımaz.",
+    breakdown_title: "Levha başına sonuçlar",
+    btn_lang: "Dil Değiştir",
+    btn_restart: "Tekrar Dene",
+    time_up: "Süre doldu!",
+  },
+  en: {
+    hero_title: "Color Vision Test",
+    hero_sub: "Select your language to begin",
+    start: "Begin Test",
+    app_title: "Color Vision Test",
+    question: "What number do you see on this plate?",
+    question_hidden: "Is there a number on this plate?",
+    no_number: "No Number",
+    correct: "Correct!",
+    wrong: "Incorrect.",
+    answer_was: "The answer was:",
+    next: "Next →",
+    finish: "See Results →",
+    plate_rg: "Red-Green",
+    plate_by: "Blue-Yellow",
+    plate_hidden: "Hidden Plate",
+    of: "/",
+    results_title: "Results",
+    correct_answers: "correct answers",
+    verdict_ok: "Normal color vision",
+    verdict_mild: "Mild color difference detected",
+    verdict_severe: "Color vision deficiency detected",
+    note_ok: "No significant issues detected. Regular eye check-ups are still recommended.",
+    note_mild: "Consult an eye doctor for a professional evaluation.",
+    note_severe: "Please see an eye specialist. This test is not a medical diagnosis.",
+    breakdown_title: "Results per plate",
+    btn_lang: "Change Language",
+    btn_restart: "Try Again",
+    time_up: "Time's up!",
+  },
+  de: {
+    hero_title: "Farbsehtest",
+    hero_sub: "Wählen Sie Ihre Sprache",
+    start: "Test starten",
+    app_title: "Farbsehtest",
+    question: "Welche Zahl siehst du auf dieser Tafel?",
+    question_hidden: "Gibt es eine Zahl auf dieser Tafel?",
+    no_number: "Keine Zahl",
+    correct: "Richtig!",
+    wrong: "Falsch.",
+    answer_was: "Die Antwort war:",
+    next: "Weiter →",
+    finish: "Ergebnis →",
+    plate_rg: "Rot-Grün",
+    plate_by: "Blau-Gelb",
+    plate_hidden: "Versteckte Tafel",
+    of: "/",
+    results_title: "Ergebnisse",
+    correct_answers: "richtige Antworten",
+    verdict_ok: "Normales Farbsehen",
+    verdict_mild: "Leichte Farbabweichung",
+    verdict_severe: "Farbsehschwäche erkannt",
+    note_ok: "Kein bedeutendes Problem festgestellt.",
+    note_mild: "Bitte einen Augenarzt aufsuchen.",
+    note_severe: "Bitte einen Spezialisten aufsuchen. Kein medizinisches Urteil.",
+    breakdown_title: "Ergebnisse pro Tafel",
+    btn_lang: "Sprache ändern",
+    btn_restart: "Erneut versuchen",
+    time_up: "Zeit abgelaufen!",
+  },
+  fr: {
+    hero_title: "Test de Vision des Couleurs",
+    hero_sub: "Sélectionnez votre langue",
+    start: "Commencer",
+    app_title: "Test de Vision des Couleurs",
+    question: "Quel chiffre voyez-vous sur cette planche ?",
+    question_hidden: "Y a-t-il un chiffre sur cette planche ?",
+    no_number: "Pas de chiffre",
+    correct: "Correct !",
+    wrong: "Incorrect.",
+    answer_was: "La réponse était :",
+    next: "Suivant →",
+    finish: "Voir les résultats →",
+    plate_rg: "Rouge-Vert",
+    plate_by: "Bleu-Jaune",
+    plate_hidden: "Planche cachée",
+    of: "/",
+    results_title: "Résultats",
+    correct_answers: "bonnes réponses",
+    verdict_ok: "Vision des couleurs normale",
+    verdict_mild: "Légère différence détectée",
+    verdict_severe: "Déficit de vision des couleurs",
+    note_ok: "Aucun problème significatif détecté.",
+    note_mild: "Consultez un ophtalmologue.",
+    note_severe: "Veuillez consulter un spécialiste. Ce test n'est pas un diagnostic.",
+    breakdown_title: "Résultats par planche",
+    btn_lang: "Changer de langue",
+    btn_restart: "Réessayer",
+    time_up: "Temps écoulé !",
+  },
+  es: {
+    hero_title: "Test de Visión de Colores",
+    hero_sub: "Selecciona tu idioma",
+    start: "Iniciar prueba",
+    app_title: "Test de Visión de Colores",
+    question: "¿Qué número ves en esta lámina?",
+    question_hidden: "¿Hay algún número en esta lámina?",
+    no_number: "Sin número",
+    correct: "¡Correcto!",
+    wrong: "Incorrecto.",
+    answer_was: "La respuesta era:",
+    next: "Siguiente →",
+    finish: "Ver resultados →",
+    plate_rg: "Rojo-Verde",
+    plate_by: "Azul-Amarillo",
+    plate_hidden: "Lámina oculta",
+    of: "/",
+    results_title: "Resultados",
+    correct_answers: "respuestas correctas",
+    verdict_ok: "Visión de colores normal",
+    verdict_mild: "Diferencia leve detectada",
+    verdict_severe: "Déficit de visión de colores",
+    note_ok: "No se detectaron problemas significativos.",
+    note_mild: "Consulte a un oftalmólogo.",
+    note_severe: "Consulte a un especialista. Esta prueba no es un diagnóstico.",
+    breakdown_title: "Resultados por lámina",
+    btn_lang: "Cambiar idioma",
+    btn_restart: "Intentar de nuevo",
+    time_up: "¡Tiempo agotado!",
+  },
+  it: { hero_title:"Test della Visione dei Colori", hero_sub:"Seleziona la lingua", start:"Inizia il test", app_title:"Test della Visione dei Colori", question:"Che numero vedi su questa tavola?", question_hidden:"C'è un numero su questa tavola?", no_number:"Nessun numero", correct:"Corretto!", wrong:"Sbagliato.", answer_was:"La risposta era:", next:"Avanti →", finish:"Vedi risultati →", plate_rg:"Rosso-Verde", plate_by:"Blu-Giallo", plate_hidden:"Tavola nascosta", of:"/", results_title:"Risultati", correct_answers:"risposte corrette", verdict_ok:"Visione dei colori normale", verdict_mild:"Lieve differenza rilevata", verdict_severe:"Deficit visivo rilevato", note_ok:"Nessun problema significativo.", note_mild:"Consulta un oculista.", note_severe:"Consulta uno specialista.", breakdown_title:"Risultati per tavola", btn_lang:"Cambia lingua", btn_restart:"Riprova", time_up:"Tempo scaduto!" },
+  pt: { hero_title:"Teste de Visão de Cores", hero_sub:"Selecione seu idioma", start:"Iniciar teste", app_title:"Teste de Visão de Cores", question:"Que número você vê nesta prancha?", question_hidden:"Há algum número nesta prancha?", no_number:"Sem número", correct:"Correto!", wrong:"Incorreto.", answer_was:"A resposta era:", next:"Próximo →", finish:"Ver resultados →", plate_rg:"Vermelho-Verde", plate_by:"Azul-Amarelo", plate_hidden:"Prancha oculta", of:"/", results_title:"Resultados", correct_answers:"respostas corretas", verdict_ok:"Visão de cores normal", verdict_mild:"Leve diferença detectada", verdict_severe:"Déficit de visão detectado", note_ok:"Nenhum problema significativo.", note_mild:"Consulte um oftalmologista.", note_severe:"Consulte um especialista.", breakdown_title:"Resultados por prancha", btn_lang:"Mudar idioma", btn_restart:"Tentar novamente", time_up:"Tempo esgotado!" },
+  nl: { hero_title:"Kleurzientest", hero_sub:"Selecteer uw taal", start:"Test starten", app_title:"Kleurzientest", question:"Welk getal zie je op deze plaat?", question_hidden:"Is er een getal op deze plaat?", no_number:"Geen getal", correct:"Correct!", wrong:"Fout.", answer_was:"Het antwoord was:", next:"Volgende →", finish:"Resultaten →", plate_rg:"Rood-Groen", plate_by:"Blauw-Geel", plate_hidden:"Verborgen plaat", of:"/", results_title:"Resultaten", correct_answers:"goede antwoorden", verdict_ok:"Normaal kleurenzien", verdict_mild:"Licht verschil gedetecteerd", verdict_severe:"Kleurenziengebrek", note_ok:"Geen significant probleem.", note_mild:"Raadpleeg een oogarts.", note_severe:"Raadpleeg een specialist.", breakdown_title:"Resultaten per plaat", btn_lang:"Taal wijzigen", btn_restart:"Opnieuw proberen", time_up:"Tijd op!" },
+  ru: { hero_title:"Тест цветового зрения", hero_sub:"Выберите язык", start:"Начать тест", app_title:"Тест цветового зрения", question:"Какое число вы видите на этой таблице?", question_hidden:"Есть ли число на этой таблице?", no_number:"Нет числа", correct:"Верно!", wrong:"Неверно.", answer_was:"Ответ был:", next:"Далее →", finish:"Результаты →", plate_rg:"Красно-зелёный", plate_by:"Сине-жёлтый", plate_hidden:"Скрытая таблица", of:"/", results_title:"Результаты", correct_answers:"правильных ответов", verdict_ok:"Нормальное цветовое зрение", verdict_mild:"Лёгкое нарушение", verdict_severe:"Нарушение цветового зрения", note_ok:"Серьёзных проблем не обнаружено.", note_mild:"Обратитесь к офтальмологу.", note_severe:"Обратитесь к специалисту.", breakdown_title:"Результаты по таблицам", btn_lang:"Сменить язык", btn_restart:"Попробовать снова", time_up:"Время вышло!" },
+  zh: { hero_title:"色觉测试", hero_sub:"请选择语言", start:"开始测试", app_title:"色觉测试", question:"你在这张色板上看到什么数字？", question_hidden:"这张色板上有数字吗？", no_number:"没有数字", correct:"正确！", wrong:"错误。", answer_was:"正确答案是：", next:"下一个 →", finish:"查看结果 →", plate_rg:"红绿", plate_by:"蓝黄", plate_hidden:"隐藏色板", of:"/", results_title:"结果", correct_answers:"个正确答案", verdict_ok:"色觉正常", verdict_mild:"检测到轻度差异", verdict_severe:"检测到色觉缺陷", note_ok:"未发现重大问题。", note_mild:"请咨询眼科医生。", note_severe:"请咨询专科医生。", breakdown_title:"每张色板的结果", btn_lang:"更改语言", btn_restart:"再试一次", time_up:"时间到！" },
+  ja: { hero_title:"色覚検査", hero_sub:"言語を選択してください", start:"テスト開始", app_title:"色覚検査", question:"この色板に見える数字は？", question_hidden:"この色板に数字はありますか？", no_number:"数字なし", correct:"正解！", wrong:"不正解。", answer_was:"正解は：", next:"次へ →", finish:"結果を見る →", plate_rg:"赤緑", plate_by:"青黄", plate_hidden:"隠し色板", of:"/", results_title:"結果", correct_answers:"正解", verdict_ok:"正常な色覚", verdict_mild:"軽度の異常を検出", verdict_severe:"色覚異常を検出", note_ok:"重大な問題は検出されませんでした。", note_mild:"眼科医に相談してください。", note_severe:"専門医に相談してください。", breakdown_title:"色板ごとの結果", btn_lang:"言語変更", btn_restart:"再試行", time_up:"時間切れ！" },
+  ar: { hero_title:"اختبار رؤية الألوان", hero_sub:"اختر لغتك", start:"ابدأ الاختبار", app_title:"اختبار رؤية الألوان", question:"ما الرقم الذي تراه في هذه اللوحة؟", question_hidden:"هل يوجد رقم في هذه اللوحة؟", no_number:"لا يوجد رقم", correct:"صحيح!", wrong:"خطأ.", answer_was:"الإجابة كانت:", next:"التالي →", finish:"عرض النتائج →", plate_rg:"أحمر-أخضر", plate_by:"أزرق-أصفر", plate_hidden:"لوحة مخفية", of:"/", results_title:"النتائج", correct_answers:"إجابات صحيحة", verdict_ok:"رؤية ألوان طبيعية", verdict_mild:"فرق طفيف", verdict_severe:"ضعف في رؤية الألوان", note_ok:"لم يُكتشف أي مشكلة.", note_mild:"استشر طبيب عيون.", note_severe:"يرجى استشارة متخصص.", breakdown_title:"نتائج كل لوحة", btn_lang:"تغيير اللغة", btn_restart:"المحاولة مجددًا", time_up:"انتهى الوقت!" },
+  ko: { hero_title:"색각 검사", hero_sub:"언어를 선택하세요", start:"검사 시작", app_title:"색각 검사", question:"이 판에서 어떤 숫자가 보이나요?", question_hidden:"이 판에 숫자가 있나요?", no_number:"숫자 없음", correct:"정답!", wrong:"오답.", answer_was:"정답은:", next:"다음 →", finish:"결과 보기 →", plate_rg:"적록", plate_by:"청황", plate_hidden:"숨겨진 판", of:"/", results_title:"결과", correct_answers:"정답", verdict_ok:"정상 색각", verdict_mild:"경미한 이상 감지", verdict_severe:"색각 이상 감지", note_ok:"중대한 문제가 감지되지 않았습니다.", note_mild:"안과 의사와 상담하세요.", note_severe:"전문의와 상담하세요.", breakdown_title:"판별 결과", btn_lang:"언어 변경", btn_restart:"다시 시도", time_up:"시간 초과!" },
+  pl: { hero_title:"Test widzenia barw", hero_sub:"Wybierz język", start:"Rozpocznij test", app_title:"Test widzenia barw", question:"Jaka liczbę widzisz na tej tablicy?", question_hidden:"Czy jest liczba na tej tablicy?", no_number:"Brak liczby", correct:"Poprawnie!", wrong:"Błędnie.", answer_was:"Odpowiedź to:", next:"Dalej →", finish:"Wyniki →", plate_rg:"Czerwono-Zielony", plate_by:"Niebiesko-Żółty", plate_hidden:"Ukryta tablica", of:"/", results_title:"Wyniki", correct_answers:"poprawne odpowiedzi", verdict_ok:"Normalne widzenie barw", verdict_mild:"Lekka różnica", verdict_severe:"Zaburzenie widzenia barw", note_ok:"Nie wykryto problemów.", note_mild:"Skonsultuj się z okulistą.", note_severe:"Skontaktuj się ze specjalistą.", breakdown_title:"Wyniki per tablica", btn_lang:"Zmień język", btn_restart:"Spróbuj ponownie", time_up:"Czas minął!" },
+  sv: { hero_title:"Färgseendetest", hero_sub:"Välj ditt språk", start:"Starta test", app_title:"Färgseendetest", question:"Vilket nummer ser du på denna platta?", question_hidden:"Finns det ett nummer på denna platta?", no_number:"Inget nummer", correct:"Rätt!", wrong:"Fel.", answer_was:"Svaret var:", next:"Nästa →", finish:"Se resultat →", plate_rg:"Röd-Grön", plate_by:"Blå-Gul", plate_hidden:"Dold platta", of:"/", results_title:"Resultat", correct_answers:"rätta svar", verdict_ok:"Normal färgsyn", verdict_mild:"Lätt skillnad", verdict_severe:"Färgsynsdefekt", note_ok:"Inga problem hittades.", note_mild:"Konsultera en ögonläkare.", note_severe:"Kontakta en specialist.", breakdown_title:"Resultat per platta", btn_lang:"Ändra språk", btn_restart:"Försök igen", time_up:"Tiden är ute!" },
+  uk: { hero_title:"Тест кольорового зору", hero_sub:"Оберіть мову", start:"Почати тест", app_title:"Тест кольорового зору", question:"Яке число ви бачите на цій таблиці?", question_hidden:"Чи є число на цій таблиці?", no_number:"Нема числа", correct:"Вірно!", wrong:"Невірно.", answer_was:"Відповідь була:", next:"Далі →", finish:"Результати →", plate_rg:"Червоно-зелений", plate_by:"Синьо-жовтий", plate_hidden:"Прихована таблиця", of:"/", results_title:"Результати", correct_answers:"правильних відповідей", verdict_ok:"Нормальний кольоровий зір", verdict_mild:"Легке порушення", verdict_severe:"Порушення кольорового зору", note_ok:"Суттєвих проблем не виявлено.", note_mild:"Зверніться до офтальмолога.", note_severe:"Зверніться до фахівця.", breakdown_title:"Результати по таблицях", btn_lang:"Змінити мову", btn_restart:"Спробувати знову", time_up:"Час вийшов!" },
+};
+
+// ── SEEDED RNG ──
+function rng(seed) {
+  let s = seed;
+  return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+
+// ── HSV → RGB ──
+function hsvToRgb(h, s, v) {
+  h = ((h % 360) + 360) % 360;
+  const c = v * s, x = c * (1 - Math.abs((h/60)%2 - 1)), m = v - c;
+  let r=0,g=0,b=0;
+  if(h<60){r=c;g=x;}else if(h<120){r=x;g=c;}else if(h<180){g=c;b=x;}
+  else if(h<240){g=x;b=c;}else if(h<300){r=x;b=c;}else{r=c;b=x;}
+  const to255 = n => Math.min(255, Math.max(0, Math.round((n+m)*255)));
+  return `rgb(${to255(r)},${to255(g)},${to255(b)})`;
+}
+
+// ── TEST DATA ── (10 plates)
+const TESTS = [
+  { answer:74, opts:[74,21,17,8],   type:"rg", hidden:false, hFg:10,  hBg:75,  s:0.72, vBase:0.62, vVar:0.28 },
+  { answer:6,  opts:[6,8,3,9],      type:"rg", hidden:false, hFg:12,  hBg:80,  s:0.68, vBase:0.58, vVar:0.30 },
+  { answer:29, opts:[29,70,7,45],   type:"rg", hidden:false, hFg:8,   hBg:85,  s:0.74, vBase:0.60, vVar:0.26 },
+  { answer:45, opts:[45,15,53,99],  type:"by", hidden:false, hFg:205, hBg:48,  s:0.70, vBase:0.64, vVar:0.24 },
+  { answer:12, opts:[12,18,21,0],   type:"rg", hidden:false, hFg:15,  hBg:78,  s:0.65, vBase:0.56, vVar:0.30 },
+  { answer:16, opts:[16,61,0,6],    type:"rg", hidden:false, hFg:6,   hBg:90,  s:0.70, vBase:0.62, vVar:0.26 },
+  { answer:97, opts:[97,79,0,9],    type:"rg", hidden:false, hFg:20,  hBg:70,  s:0.66, vBase:0.58, vVar:0.28 },
+  { answer:0,  opts:[0,35,53,5],    type:"hidden", hidden:true, hFg:40, hBg:42, s:0.30, vBase:0.55, vVar:0.30 },
+  { answer:8,  opts:[8,3,9,6],      type:"rg", hidden:false, hFg:5,   hBg:82,  s:0.76, vBase:0.64, vVar:0.24 },
+  { answer:36, opts:[36,63,3,6],    type:"by", hidden:false, hFg:210, hBg:52,  s:0.68, vBase:0.60, vVar:0.26 },
+];
+
+// ── STATE ──
+let lang = "en";
+let current = 0, score = 0, answered = false;
+let timerInterval = null, timeLeft = 12;
+const history = [];
+
+// ── DIGIT BITMAPS 5×7 ──
+const DIGITS = {
+  "0":[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,1,1],[1,0,1,0,1],[1,1,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+  "1":[[0,0,1,0,0],[0,1,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,0,1,0,0],[0,1,1,1,0]],
+  "2":[[0,1,1,1,0],[1,0,0,0,1],[0,0,0,0,1],[0,0,0,1,0],[0,0,1,0,0],[0,1,0,0,0],[1,1,1,1,1]],
+  "3":[[1,1,1,1,0],[0,0,0,0,1],[0,0,0,1,0],[0,0,1,1,0],[0,0,0,0,1],[0,0,0,0,1],[1,1,1,1,0]],
+  "4":[[0,0,0,1,0],[0,0,1,1,0],[0,1,0,1,0],[1,0,0,1,0],[1,1,1,1,1],[0,0,0,1,0],[0,0,0,1,0]],
+  "5":[[1,1,1,1,1],[1,0,0,0,0],[1,1,1,1,0],[0,0,0,0,1],[0,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+  "6":[[0,1,1,1,0],[1,0,0,0,0],[1,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+  "7":[[1,1,1,1,1],[0,0,0,0,1],[0,0,0,1,0],[0,0,1,0,0],[0,1,0,0,0],[0,1,0,0,0],[0,1,0,0,0]],
+  "8":[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,0]],
+  "9":[[0,1,1,1,0],[1,0,0,0,1],[1,0,0,0,1],[0,1,1,1,1],[0,0,0,0,1],[0,0,0,0,1],[0,1,1,1,0]],
+};
+
+// ── REAL ISHIHARA PLATE GENERATOR ──
+// Based on ruoso/ishihara-generator algorithm (MIT):
+// 1. Place N points with log-radial distribution (denser at center)
+// 2. Size each circle by nearest-neighbor distance
+// 3. Color each circle by HSV: same S+V range, only H differs (fg vs bg)
+// 4. V varies ±vVar randomly — this is what makes it hard for colorblind people
+function drawPlate(canvas, test, idx) {
+  const ctx = canvas.getContext("2d");
+  const W = 300, R = 148;
+  canvas.width = W; canvas.height = W;
+  ctx.clearRect(0, 0, W, W);
+  const rand = rng(idx * 9371 + 137);
+
+  const COUNT = 1800;
+  const MIN_R = 3.5, MAX_R = 14;
+
+  // ── 1. Generate point positions (log-radial, like Perl original) ──
+  const pts = [];
+  for (let i = 0; i < COUNT; i++) {
+    const angle = rand() * Math.PI * 2;
+    // log distribution: log(rand*9+1)/log(10) — denser near center
+    const distNorm = Math.log(rand() * 9 + 1) / Math.log(10);
+    const dist = distNorm * (R - MAX_R - 2);
+    pts.push({ x: W/2 + dist * Math.cos(angle), y: W/2 + dist * Math.sin(angle), r: 0 });
+  }
+
+  // ── 2. Mask function: is this point inside the number? ──
+  // Build pixel mask on offscreen canvas
+  const mask = buildMask(test, W);
+
+  // ── 3. Size each circle by half the distance to nearest neighbor ──
+  // Use spatial grid to speed up neighbor search
+  const gridCells = 20;
+  const cellSz = W / gridCells;
+  const grid = {};
+  function gridKey(gx, gy) { return gx + ',' + gy; }
+  function addToGrid(p) {
+    const gx = Math.floor(p.x / cellSz), gy = Math.floor(p.y / cellSz);
+    for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+      const k = gridKey(gx+dx, gy+dy);
+      if (!grid[k]) grid[k] = [];
+      grid[k].push(p);
+    }
+  }
+  function nearestDist(p) {
+    const gx = Math.floor(p.x / cellSz), gy = Math.floor(p.y / cellSz);
+    const k = gridKey(gx, gy);
+    const neighbors = grid[k] || [];
+    let best = R;
+    for (const q of neighbors) {
+      if (q === p) continue;
+      const d = Math.sqrt((q.x-p.x)**2 + (q.y-p.y)**2);
+      if (d < best) best = d;
+    }
+    return best;
+  }
+
+  // First pass: add all to grid
+  for (const p of pts) addToGrid(p);
+
+  // Second pass: compute radius = half nearest-neighbor dist, clamped
+  for (const p of pts) {
+    const d = nearestDist(p);
+    p.r = Math.min(MAX_R, Math.max(MIN_R, d * 0.48));
+  }
+
+  // ── 4. Draw circles with HSV coloring ──
+  // clip setup
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(W/2, W/2, R, 0, Math.PI*2);
+  ctx.clip();
+
+  // Draw each point
+  for (const p of pts) {
+    // Is this point inside the number mask?
+    const mx = Math.round(p.x), my = Math.round(p.y);
+    const inNumber = mask[my * W + mx] === 1;
+    const isFg = test.hidden ? false : inNumber;
+
+    // HSV: same S and V range, hue differs
+    const hue = isFg ? test.hFg : test.hBg;
+    // Value varies randomly (this is the Ishihara trick)
+    const v = Math.min(1, Math.max(0.25, test.vBase + (rand() * 2 - 1) * test.vVar));
+    // Slight saturation variation
+    const s = Math.min(1, Math.max(0.2, test.s + (rand() * 0.16 - 0.08)));
+    // Tiny hue jitter for naturalness
+    const h = hue + (rand() * 10 - 5);
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = hsvToRgb(h, s, v);
+    ctx.fill();
+  }
+
+  // Vignette
+  const grad = ctx.createRadialGradient(W/2,W/2,R*0.55, W/2,W/2,R);
+  grad.addColorStop(0, "rgba(0,0,0,0)");
+  grad.addColorStop(1, "rgba(0,0,0,0.13)");
+  ctx.beginPath();
+  ctx.arc(W/2,W/2,R,0,Math.PI*2);
+  ctx.fillStyle = grad; ctx.fill();
+
+  ctx.restore();
+}
+
+// Build a binary mask: 1 = inside number, 0 = background
+function buildMask(test, W) {
+  const mask = new Uint8Array(W * W);
+  if (test.hidden || test.answer === 0) return mask;
+
+  const ansStr = String(test.answer);
+  // Render digits onto an offscreen canvas, then sample
+  const oc = document.createElement('canvas');
+  oc.width = W; oc.height = W;
+  const octx = oc.getContext('2d');
+
+  // Use chunky font for cleaner mask
+  const fontSize = ansStr.length === 1 ? 140 : 100;
+  octx.fillStyle = '#000';
+  octx.font = `900 ${fontSize}px Georgia, serif`;
+  octx.textAlign = 'center';
+  octx.textBaseline = 'middle';
+  // Draw slightly offset copies to fatten the mask (more dots in number)
+  for (let ox = -6; ox <= 6; ox += 3) for (let oy = -6; oy <= 6; oy += 3)
+    octx.fillText(ansStr, W/2 + ox, W/2 + oy);
+
+  const imgData = octx.getImageData(0, 0, W, W).data;
+  for (let i = 0; i < W * W; i++) {
+    mask[i] = imgData[i * 4 + 3] > 30 ? 1 : 0; // alpha channel
+  }
+  return mask;
+}
+
+// ── UI BUILDER ──
+function t(key) { return (T[lang]||T.en)[key] || key; }
+
+function buildLangGrid() {
+  const grid = document.getElementById("lang-grid");
+  grid.innerHTML = "";
+  LANGS.forEach(l => {
+    const btn = document.createElement("button");
+    btn.className = "lang-btn" + (l.code === lang ? " selected" : "");
+    btn.innerHTML = `<span class="flag">${l.flag}</span><span><span class="lang-name">${l.name}</span><span class="lang-native">${l.native}</span></span>`;
+    btn.onclick = () => { lang = l.code; buildLangGrid(); updateLangScreen(); };
+    grid.appendChild(btn);
+  });
+}
+
+function updateLangScreen() {
+  document.getElementById("hero-title").textContent = t("hero_title");
+  document.getElementById("hero-sub").textContent = t("hero_sub");
+  document.getElementById("start-label").textContent = t("start");
+}
+
+function startApp() {
+  document.getElementById("lang-screen").style.display = "none";
+  document.getElementById("app-screen").style.display = "block";
+  document.getElementById("app-title").textContent = t("app_title");
+  current = 0; score = 0; answered = false; history.length = 0;
+  const lObj = LANGS.find(l => l.code === lang);
+  document.getElementById("lang-change").textContent = lObj ? lObj.flag : "🌐";
+  showQuestion();
+}
+
+function changeLang() {
+  clearTimer();
+  document.getElementById("result-screen").style.display = "none";
+  document.getElementById("app-screen").style.display = "none";
+  document.getElementById("lang-screen").style.display = "block";
+  buildLangGrid(); updateLangScreen();
+}
+
+function buildProgress() {
+  const p = document.getElementById("progress");
+  p.innerHTML = "";
+  for (let i = 0; i < TESTS.length; i++) {
+    const d = document.createElement("div");
+    d.className = "prog-dot" + (i < current ? " done" : i === current ? " current" : "");
+    p.appendChild(d);
+  }
+}
+
+function buildOptions(test) {
+  const opt = document.getElementById("options");
+  opt.innerHTML = "";
+  let choices = [...test.opts];
+  choices.sort(() => Math.random() - 0.5);
+  if (!choices.includes(test.answer)) choices[0] = test.answer;
+  choices.sort(() => Math.random() - 0.5);
+
+  for (const c of choices) {
+    const btn = document.createElement("button");
+    btn.className = "opt-btn";
+    btn.textContent = c === 0 ? t("no_number") : c;
+    btn.onclick = () => checkAnswer(c, test, btn);
+    opt.appendChild(btn);
+  }
+}
+
+function startTimer() {
+  clearTimer();
+  timeLeft = 12;
+  const bar = document.getElementById("timer-bar");
+  bar.style.width = "100%";
+  bar.style.background = "";
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    const pct = (timeLeft / 12) * 100;
+    bar.style.width = pct + "%";
+    if (timeLeft <= 4) bar.style.background = "#B5540A";
+    if (timeLeft <= 0) {
+      clearTimer();
+      bar.style.width = "0%";
+      autoFail();
+    }
+  }, 1000);
+}
+
+function clearTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function autoFail() {
+  if (answered) return;
+  answered = true;
+  document.getElementById("feedback").textContent = t("time_up") + " " + t("answer_was") + " " + (TESTS[current].answer === 0 ? t("no_number") : TESTS[current].answer);
+  document.querySelectorAll(".opt-btn").forEach(b => {
+    const bVal = b.textContent === t("no_number") ? 0 : parseInt(b.textContent);
+    if (bVal === TESTS[current].answer) b.classList.add("correct");
+    b.disabled = true;
+  });
+  history.push({ plate: current+1, correct: false, answer: TESTS[current].answer, given: -1 });
+  const nb = document.getElementById("next-btn");
+  nb.style.display = "block";
+  nb.textContent = current < TESTS.length-1 ? t("next") : t("finish");
+}
+
+function checkAnswer(val, test, btn) {
+  if (answered) return;
+  clearTimer();
+  answered = true;
+  const correct = val === test.answer;
+  if (correct) { score++; btn.classList.add("correct"); btn.classList.add("pop"); }
+  else { btn.classList.add("wrong"); }
+
+  document.querySelectorAll(".opt-btn").forEach(b => {
+    const bVal = b.textContent === t("no_number") ? 0 : parseInt(b.textContent);
+    if (bVal === test.answer) b.classList.add("correct");
+    b.disabled = true;
+  });
+
+  const fb = document.getElementById("feedback");
+  if (correct) {
+    fb.textContent = t("correct");
+    fb.style.color = "var(--accent)";
+  } else {
+    const ans = test.answer === 0 ? t("no_number") : test.answer;
+    fb.textContent = t("wrong") + " " + t("answer_was") + " " + ans;
+    fb.style.color = "var(--danger)";
+  }
+
+  history.push({ plate: current+1, correct, answer: test.answer, given: val, type: test.type });
+
+  const nb = document.getElementById("next-btn");
+  nb.style.display = "block";
+  nb.textContent = current < TESTS.length-1 ? t("next") : t("finish");
+}
+
+function showQuestion() {
+  answered = false;
+  document.getElementById("feedback").textContent = "";
+  document.getElementById("feedback").style.color = "";
+  document.getElementById("next-btn").style.display = "none";
+  document.getElementById("timer-bar").style.width = "100%";
+  document.getElementById("timer-bar").style.background = "";
+
+  const test = TESTS[current];
+  buildProgress();
+  buildOptions(test);
+
+  document.getElementById("plate-num").textContent =
+    String(current+1).padStart(2,"0") + " " + t("of") + " " + TESTS.length;
+
+  const typeLabels = { rg: t("plate_rg"), by: t("plate_by"), hidden: t("plate_hidden") };
+  document.getElementById("plate-type").textContent = typeLabels[test.type] || "";
+
+  document.getElementById("question").textContent =
+    test.hidden ? t("question_hidden") : t("question");
+
+  const canvas = document.getElementById("plate");
+  drawPlate(canvas, test, current);
+
+  startTimer();
+}
+
+function showResult() {
+  clearTimer();
+  document.getElementById("app-screen").style.display = "none";
+  document.getElementById("result-screen").style.display = "block";
+
+  const total = TESTS.length;
+  const pct = score / total;
+
+  document.getElementById("res-score").textContent = score + t("of") + total;
+  document.getElementById("res-sub").textContent = score + " " + t("correct_answers");
+
+  const verdict = document.getElementById("res-verdict");
+  const note = document.getElementById("res-note");
+  const emoji = document.getElementById("result-emoji");
+
+  if (pct >= 0.8) {
+    verdict.textContent = t("verdict_ok");
+    verdict.className = "verdict-badge verdict-ok";
+    note.textContent = t("note_ok");
+    emoji.textContent = "✅";
+  } else if (pct >= 0.6) {
+    verdict.textContent = t("verdict_mild");
+    verdict.className = "verdict-badge verdict-mild";
+    note.textContent = t("note_mild");
+    emoji.textContent = "⚠️";
+  } else {
+    verdict.textContent = t("verdict_severe");
+    verdict.className = "verdict-badge verdict-severe";
+    note.textContent = t("note_severe");
+    emoji.textContent = "🔴";
+  }
+
+  // breakdown table
+  const bd = document.getElementById("breakdown");
+  let html = `<h3>${t("breakdown_title")}</h3>`;
+  history.forEach(h => {
+    const ans = h.answer === 0 ? t("no_number") : h.answer;
+    html += `<div class="breakdown-row">
+      <span class="br-label">${t("plate_rg")} #${h.plate}</span>
+      <span class="br-val ${h.correct ? "br-correct":"br-wrong"}">${h.correct ? "✓ "+ans : "✗ "+ans}</span>
+    </div>`;
+  });
+  bd.innerHTML = html;
+
+  document.getElementById("btn-lang-change").textContent = t("btn_lang");
+  document.getElementById("btn-restart").textContent = t("btn_restart");
+}
+
+function restart() {
+  current = 0; score = 0; answered = false; history.length = 0;
+  document.getElementById("result-screen").style.display = "none";
+  document.getElementById("app-screen").style.display = "block";
+  showQuestion();
+}
+
+document.getElementById("next-btn").onclick = () => {
+  current++;
+  if (current >= TESTS.length) showResult();
+  else showQuestion();
+};
+
+// ── INIT ──
+buildLangGrid();
+updateLangScreen();
+</script>
+</body>
+</html>
